@@ -1,224 +1,223 @@
-=================================================
-_**Documentação de Rotas da API**_
-=================================================
 
-AUTENTICAÇÃO
-A API utiliza autenticação via JWT no header Authorization.
-Formato:
-Authorization: Bearer SEU_TOKEN
-Rotas protegidas utilizam o middleware verifyJWT.
+_**DOCUMENTAÇÃO DE ROTAS DA API**_
+
+
+AUTENTICAÇÃO</br>
+A API utiliza autenticação via JWT no header Authorization.</br>
+Formato: Authorization: Bearer SEU_TOKEN</br>
+Rotas protegidas utilizam o middleware verifyJWT.</br>
 Algumas rotas também exigem verifyRoles para acesso
 administrativo.
 
-=================================================
-ROTAS DE USUÁRIOS
-=================================================
 
-Cadastro de Usuário
-POST /usuarios/cadastrar
-- Autenticação: Não necessária
-Body obrigatório:
-{
-"email": "usuario@email.com",
-"senha": "123456"
-}
-Body opcional:
-{
-"nome": "João",
-"role": "2"
-}
-Observações:
-- Caso nome não seja enviado, o email será utilizado.
-- Caso role não seja enviado, será definido como "2".
-- O email não pode estar já cadastrado.
-Respostas possíveis:
+**_ROTAS DE USUÁRIOS_**
 
-201 - Usuário criado
-{
-"status": "ok",
-"message": "Usuário cadastrado com sucesso."
-}
 
-400 - Campos obrigatórios faltando
-409 - Email já cadastrado
-—————————————————————————
-Login
-POST /usuarios/login
-- Autenticação: Não necessária
-Body obrigatório:
-{
-"email": "usuario@email.com",
-"senha": "123456"
-}
-Respostas possíveis:
-201 - Login realizado
-{
-"status": "Successful login",
-"tokenLogin": "JWT_TOKEN"
-}
+Cadastro de Usuário</br>
+POST /usuarios/cadastrar</br>
+Autenticação: Não necessária</br>
+Body obrigatório:</br>
+>{</br>
+>&nbsp;&nbsp;&nbsp;&nbsp;"nome": "Usuario",</br>
+>&nbsp;&nbsp;&nbsp;&nbsp;"email": "usuario@email.com",</br>
+>&nbsp;&nbsp;&nbsp;&nbsp;"senha": "123456",</br>
+>&nbsp;&nbsp;&nbsp;&nbsp;"role": 1</br>
+>}</br>
+</br>
+Parâmetros opcionais: nome, senha</br>
 
-400 - Campos faltando
-401 - Credenciais inválidas
-—————————————————————————
-Buscar todos os usuários
+Observações:</br>
+- Caso nome não seja enviado, o email será utilizado.</br>
+- Caso role não seja enviado, será definido como "2".</br>
+- O email não pode estar já cadastrado.</br>
+Respostas possíveis:</br>
+</br>
+201 - Usuário criado:</br>
+>{</br>
+>&nbsp;&nbsp;&nbsp;&nbsp;"status": "ok",</br>
+>&nbsp;&nbsp;&nbsp;&nbsp;"message": "Usuário cadastrado com sucesso."</br>
+>}</br>
+</br>
+400 - Campos obrigatórios faltando</br>
+409 - Email já cadastrado</br>
+—————————————————————————</br>
+Login</br>
+POST /usuarios/login</br>
+Autenticação: Não necessária</br>
+Body obrigatório:</br>
+>{</br>
+>&nbsp;&nbsp;&nbsp;&nbsp;"email": "usuario@email.com",</br>
+>&nbsp;&nbsp;&nbsp;&nbsp;"senha": "123456"</br>
+>}</br>
+Respostas possíveis:</br>
+201 - Login realizado</br>
+{</br>
+&nbsp;&nbsp;&nbsp;&nbsp;"status": "Successful login",</br>
+&nbsp;&nbsp;&nbsp;&nbsp;"tokenLogin": "JWT_TOKEN"</br>
+}</br>
+</br>
+400 - Campos faltando</br>
+401 - Credenciais inválidas</br>
+—————————————————————————</br>
+Buscar todos os usuários</br>
+</br>
+GET /usuarios</br>
+Autenticação: Necessária</br>
+Permissão: Administrador</br>
+Body: Não possui.</br>
+Respostas possíveis:</br>
+200 - Lista retornada:</br>
+{</br>
+&nbsp;&nbsp;&nbsp;&nbsp;"usuarios": []</br>
+}</br>
+</br>
+401 - Token inválido ou ausente</br>
+403 - Sem permissão</br>
+—————————————————————————</br>
+Buscar usuário por ID</br>
+GET /usuarios/:id</br>
+- Autenticação: Necessária</br>
+- Permissão: Administrador</br>
+Body: Não possui.</br>
+Respostas possíveis:</br>
+200 - Usuário encontrado</br>
+404 - Usuário inexistente</br>
+401 - Token inválido ou ausente</br>
+403 - Sem permissão</br>
+—————————————————————————</br>
+Atualizar usuário</br>
+PATCH /usuarios/:id</br>
+Autenticação: Necessária</br>
+</br>
+Body opcional:</br>
+{</br>
+&nbsp;&nbsp;&nbsp;&nbsp;"nome": "Novo Nome",</br>
+&nbsp;&nbsp;&nbsp;&nbsp;"email": "novo@email.com",</br>
+&nbsp;&nbsp;&nbsp;&nbsp;"senha": "123456",</br>
+&nbsp;&nbsp;&nbsp;&nbsp;"confirmarSenha": "123456",</br>
+&nbsp;&nbsp;&nbsp;&nbsp;"role": "1"</br>
+}</br>
+Observações:</br>
+- Usuários comuns só podem alterar o próprio usuário.</br>
+- Usuários comuns não podem alterar role.</br>
+- Se enviar senha, confirmarSenha também deve ser enviado.</br>
+Respostas possíveis:</br>
+204 - Usuário atualizado</br>
+400 - Dados inválidos</br>
+401 - Token inválido</br>
+403 - Sem permissão</br>
+404 - Usuário não encontrado</br>
+409 - Email já cadastrado</br>
+—————————————————————————</br>
+Deletar usuário</br>
+DELETE /usuarios/:id</br>
+- Autenticação: Necessária</br>
+- Permissão: Administrador</br>
+Parâmetros</br>
+id, do tipo 'number'</br>
+Body: Não possui.</br>
+Respostas possíveis:</br>
+</br>
+200 - Usuário removido</br>
+400 - ID inválido</br>
+404 - Usuário não encontrado</br>
+401 - Token inválido</br>
+403 - Sem permissão</br>
+</br>
 
-GET /usuarios
-- Autenticação: Necessária
-- Permissão: Administrador
-Body: Não possui.
-Respostas possíveis:
-200 - Lista retornada:
-{
-"usuarios": []
-}
-
-401 - Token inválido ou ausente
-403 - Sem permissão
-—————————————————————————
-Buscar usuário por ID
-GET /usuarios/:id
-- Autenticação: Necessária
-- Permissão: Administrador
-Body: Não possui.
-Respostas possíveis:
-200 - Usuário encontrado
-404 - Usuário inexistente
-401 - Token inválido ou ausente
-403 - Sem permissão
-—————————————————————————
-Atualizar usuário
-PATCH /usuarios/:id
-- Autenticação: Necessária
-
-Body opcional:
-{
-"nome": "Novo Nome",
-"email": "novo@email.com",
-"senha": "123456",
-"confirmarSenha": "123456",
-"role": "1"
-}
-Observações:
-- Usuários comuns só podem alterar o próprio usuário.
-- Usuários comuns não podem alterar role.
-- Se enviar senha, confirmarSenha também deve ser enviado.
-Respostas possíveis:
-204 - Usuário atualizado
-400 - Dados inválidos
-401 - Token inválido
-403 - Sem permissão
-404 - Usuário não encontrado
-409 - Email já cadastrado
-—————————————————————————
-Deletar usuário
-DELETE /usuarios/:id
-- Autenticação: Necessária
-- Permissão: Administrador
-Parâmetros
-id, do tipo 'number'
-Body: Não possui.
-Respostas possíveis:
-
-200 - Usuário removido
-400 - ID inválido
-404 - Usuário não encontrado
-401 - Token inválido
-403 - Sem permissão
-
-=================================================
-ROTAS DE PRODUTOS
-=================================================
-Cadastrar produto
-POST /produtos
-- Autenticação: Necessária
-Body obrigatório:
-{
-"marca": "Fender",
-"modelo": "Stratocaster",
-"quantidade": 10,
-"preco": 5999.90
-}
-Validações:
-- preco deve ser maior que zero.
-Respostas possíveis:
-201 - Produto criado:
-{
-"status": "ok",
-"message": "Produto criado com sucesso.",
-"data": {}
-}
-
-400 - Campos inválidos
-
-401 - Token inválido
-
-—————————————————————————
-Buscar todos os produtos
-GET /produtos
-- Autenticação: Necessária
-Body: Não possui.
-Respostas possíveis:
-200 - Lista retornada:
-{
-"produtos": []
-}
-401 - Token inválido
-—————————————————————————
-Buscar produto por ID
-GET /produtos/search?modelo=
-- Autenticação: Necessária
-Exemplo:
-GET /produtos/search?modelo=stratocaster
-Body: Não possui.
-Respostas possíveis:
-200 - Produto encontrado:
-{
-"status": "ok",
-"data": {}
-}
-404 - Produto não encontrado
-
-401 - Token inválido
-—————————————————————————
-Atualizar produto
-PATCH /produtos/:id
-- Autenticação: Necessária
-- Permissão: Administrador
-Body opcional:
-{
-"marca": "Ibanez",
-"modelo": "RG550",
-"quantidade": 20,
-"preco": 4999.90
-}
-Respostas possíveis:
-200 - Produto atualizado
-400 - Dados inválidos
-401 - Token inválido
-403 - Sem permissão
-404 - Produto não encontrado
-—————————————————————————
-Alterar estado do produto (Ativo ou Inativo)
-PATCH /produtos/mudarEstado/:id
-- Autenticação: Necessária
-- Permissão: Administrador
-Respostas possíveis:
-200 - Estado alterado
-400 - ID inválido
-
-404 - Produto não encontrado
-401 - Token inválido
-403 - Sem permissão
-—————————————————————————
-Deletar produto
-DELETE /produtos/:id
-- Autenticação: Necessária
-- Permissão: Administrador
-
-Body: Não possui.
-Respostas possíveis:
-200 - Produto removido
-400 - ID inválido
-404 - Produto não encontrado
-401 - Token inválido
-403 - Sem permissão
+_**ROTAS DE PRODUTOS**_ </br>
+</br>
+Cadastrar produto</br>
+POST /produtos</br>
+- Autenticação: Necessária</br>
+Body obrigatório:</br>
+{</br>
+&nbsp;&nbsp;&nbsp;&nbsp;"marca": "Fender",</br>
+&nbsp;&nbsp;&nbsp;&nbsp;"modelo": "Stratocaster",</br>
+&nbsp;&nbsp;&nbsp;&nbsp;"quantidade": 10,</br>
+&nbsp;&nbsp;&nbsp;&nbsp;"preco": 5999.90</br>
+}</br>
+Validações:</br>
+- preco deve ser maior que zero.</br>
+Respostas possíveis:</br>
+201 - Produto criado:</br>
+{</br>
+&nbsp;&nbsp;&nbsp;&nbsp;"status": "ok",</br>
+&nbsp;&nbsp;&nbsp;&nbsp;"message": "Produto criado com sucesso.",</br>
+&nbsp;&nbsp;&nbsp;&nbsp;"data": {}</br>
+}</br>
+</br>
+400 - Campos inválidos</br>
+</br>
+401 - Token inválido</br>
+</br>
+—————————————————————————</br>
+Buscar todos os produtos</br>
+GET /produtos</br>
+Autenticação: Necessária</br>
+Body: Não possui.</br>
+Respostas possíveis:</br>
+200 - Lista retornada:</br>
+{</br>
+"produtos": []</br>
+}</br>
+401 - Token inválido</br>
+—————————————————————————</br>
+Buscar produto por ID</br>
+GET /produtos/search?modelo=</br>
+Autenticação: Necessária</br>
+Exemplo:</br>
+GET /produtos/search?modelo=stratocaster</br>
+Body: Não possui.</br>
+Respostas possíveis:</br>
+200 - Produto encontrado:</br>
+{</br>
+&nbsp;&nbsp;&nbsp;&nbsp;"status": "ok",</br>
+&nbsp;&nbsp;&nbsp;&nbsp;"data": {}</br>
+}</br>
+404 - Produto não encontrado</br>
+</br>
+401 - Token inválido</br>
+—————————————————————————</br>
+Atualizar produto</br>
+PATCH /produtos/:id</br>
+Autenticação: Necessária</br>
+Permissão: Administrador</br>
+Body opcional:</br>
+{</br>
+&nbsp;&nbsp;&nbsp;&nbsp;"marca": "Ibanez",</br>
+&nbsp;&nbsp;&nbsp;&nbsp;"modelo": "RG550",</br>
+&nbsp;&nbsp;&nbsp;&nbsp;"quantidade": 20,</br>
+&nbsp;&nbsp;&nbsp;&nbsp;"preco": 4999.90</br>
+}</br>
+Respostas possíveis:</br>
+200 - Produto atualizado</br>
+400 - Dados inválidos</br>
+401 - Token inválido</br>
+403 - Sem permissão</br>
+404 - Produto não encontrado</br>
+—————————————————————————</br>
+Alterar estado do produto (Ativo ou Inativo)</br>
+PATCH /produtos/mudarEstado/:id</br>
+Autenticação: Necessária</br>
+Permissão: Administrador</br>
+Respostas possíveis:</br>
+200 - Estado alterado</br>
+400 - ID inválido</br>
+</br>
+404 - Produto não encontrado</br>
+401 - Token inválido</br>
+403 - Sem permissão</br>
+—————————————————————————</br>
+Deletar produto</br>
+DELETE /produtos/:id</br>
+Autenticação: Necessária</br>
+Permissão: Administrador</br>
+</br>
+Body: Não possui.</br>
+Respostas possíveis:</br>
+200 - Produto removido</br>
+400 - ID inválido</br>
+404 - Produto não encontrado</br>
+401 - Token inválido</br>
+403 - Sem permissão</br>
