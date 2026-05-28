@@ -1,4 +1,5 @@
-Documentação de Rotas da API
+_**Documentação de Rotas da API**_
+
 AUTENTICAÇÃO
 A API utiliza autenticação via JWT no header Authorization.
 Formato:
