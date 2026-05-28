@@ -1,4 +1,6 @@
+=================================================
 _**Documentação de Rotas da API**_
+=================================================
 
 AUTENTICAÇÃO
 A API utiliza autenticação via JWT no header Authorization.
@@ -7,9 +9,11 @@ Authorization: Bearer SEU_TOKEN
 Rotas protegidas utilizam o middleware verifyJWT.
 Algumas rotas também exigem verifyRoles para acesso
 administrativo.
-==================================================
+
+=================================================
 ROTAS DE USUÁRIOS
-==================================================
+=================================================
+
 Cadastro de Usuário
 POST /usuarios/cadastrar
 - Autenticação: Não necessária
