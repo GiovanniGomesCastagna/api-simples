@@ -27,11 +27,13 @@ Observações:
 - Caso role não seja enviado, será definido como "2".
 - O email não pode estar já cadastrado.
 Respostas possíveis:
+
 201 - Usuário criado
 {
 "status": "ok",
 "message": "Usuário cadastrado com sucesso."
 }
+
 400 - Campos obrigatórios faltando
 409 - Email já cadastrado
 —————————————————————————
@@ -49,10 +51,12 @@ Respostas possíveis:
 "status": "Successful login",
 "tokenLogin": "JWT_TOKEN"
 }
+
 400 - Campos faltando
 401 - Credenciais inválidas
 —————————————————————————
 Buscar todos os usuários
+
 GET /usuarios
 - Autenticação: Necessária
 - Permissão: Administrador
@@ -62,6 +66,7 @@ Respostas possíveis:
 {
 "usuarios": []
 }
+
 401 - Token inválido ou ausente
 403 - Sem permissão
 —————————————————————————
@@ -79,6 +84,7 @@ Respostas possíveis:
 Atualizar usuário
 PATCH /usuarios/:id
 - Autenticação: Necessária
+
 Body opcional:
 {
 "nome": "Novo Nome",
@@ -107,11 +113,13 @@ Parâmetros
 id, do tipo 'number'
 Body: Não possui.
 Respostas possíveis:
-200 - Usuário removido
+
+200 - Usuário removido
 400 - ID inválido
 404 - Usuário não encontrado
 401 - Token inválido
 403 - Sem permissão
+
 ==================================================
 ROTAS DE PRODUTOS
 ==================================================
@@ -134,8 +142,11 @@ Respostas possíveis:
 "message": "Produto criado com sucesso.",
 "data": {}
 }
+
 400 - Campos inválidos
+
 401 - Token inválido
+
 —————————————————————————
 Buscar todos os produtos
 GET /produtos
@@ -161,6 +172,7 @@ Respostas possíveis:
 "data": {}
 }
 404 - Produto não encontrado
+
 401 - Token inválido
 —————————————————————————
 Atualizar produto
@@ -188,6 +200,7 @@ PATCH /produtos/mudarEstado/:id
 Respostas possíveis:
 200 - Estado alterado
 400 - ID inválido
+
 404 - Produto não encontrado
 401 - Token inválido
 403 - Sem permissão
@@ -196,6 +209,7 @@ Deletar produto
 DELETE /produtos/:id
 - Autenticação: Necessária
 - Permissão: Administrador
+
 Body: Não possui.
 Respostas possíveis:
 200 - Produto removido
